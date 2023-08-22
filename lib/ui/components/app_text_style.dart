@@ -49,4 +49,10 @@ class AppLightTextStyle {
     fontSize: 10,
     color: AppColors.green,
   );
+
+    static const TextStyle appSplashScreenLogo = TextStyle(
+    fontFamily: FontFamily.mr,
+    fontSize: 14,
+    color: AppColors.black,
+  );
 }

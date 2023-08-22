@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 
-class AppMainScreenButton extends StatelessWidget {
+class AppButton2 extends StatelessWidget {
   final Function() onPressed;
   final String text;
-  AppMainScreenButton({required this.onPressed, required this.text});
+  AppButton2({required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {

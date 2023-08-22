@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 
-class AppSmallButton extends StatelessWidget {
+class AppButton3 extends StatelessWidget {
   final String text;
-  AppSmallButton({required this.text});
+  AppButton3({required this.text});
 
   @override
   Widget build(BuildContext context) {
