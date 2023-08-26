@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 
-class AppButton3 extends StatelessWidget {
+class AppModifyButton extends StatelessWidget {
   final String text;
-  AppButton3({required this.text});
+  AppModifyButton({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class AppButton3 extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: AppLightTextStyle.appButton3,
+            style: AppLightTextStyle.appModifyButton,
           ),
         ),
       ),

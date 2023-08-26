@@ -9,20 +9,25 @@ class AppLightTextStyle {
     color: AppColors.black,
   );
 
-  static const TextStyle appButton1 = TextStyle(
+  static const TextStyle appGreenButton = TextStyle(
     fontFamily: FontFamily.mr,
     fontSize: 11,
     color: AppColors.white,
   );
-
-  static const TextStyle appButton2 = TextStyle(
-    fontFamily: FontFamily.mr,
-    fontSize: 11,
+  static const TextStyle appModifyButton = TextStyle(
     color: AppColors.white,
-  );
-  static const TextStyle appButton3 = TextStyle(
     fontFamily: FontFamily.mr,
     fontSize: 10,
+  );
+
+  static const TextStyle appSmallBlackButton = TextStyle(
+    fontFamily: FontFamily.mr,
+    fontSize: 7,
+    color: AppColors.white,
+  );
+  static const TextStyle appLargeBlackButton = TextStyle(
+    fontFamily: FontFamily.mr,
+    fontSize: 11,
     color: AppColors.white,
   );
 
@@ -44,13 +49,13 @@ class AppLightTextStyle {
     color: AppColors.cardItemContent,
   );
 
-    static const TextStyle appCardItemContent2 = TextStyle(
+  static const TextStyle appCardItemContent2 = TextStyle(
     fontFamily: FontFamily.mr,
     fontSize: 10,
     color: AppColors.green,
   );
 
-    static const TextStyle appSplashScreenLogo = TextStyle(
+  static const TextStyle appSplashScreenLogo = TextStyle(
     fontFamily: FontFamily.mr,
     fontSize: 14,
     color: AppColors.black,

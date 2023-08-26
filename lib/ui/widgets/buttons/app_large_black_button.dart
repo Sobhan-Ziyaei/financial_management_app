@@ -1,13 +1,11 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 
-class AppButton2 extends StatelessWidget {
+class AppLargeBlackButton extends StatelessWidget {
   final Function() onPressed;
   final String text;
-  AppButton2({required this.onPressed, required this.text});
+  AppLargeBlackButton({required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +30,7 @@ class AppButton2 extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             text,
-            style: AppLightTextStyle.appButton2,
+            style: AppLightTextStyle.appLargeBlackButton,
           ),
         ),
       ),

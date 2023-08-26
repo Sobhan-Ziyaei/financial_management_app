@@ -3,12 +3,14 @@ import 'package:work_report_app/gen/fonts.gen.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 
-class AppMainTextField extends StatelessWidget {
+class AppModifyTextField extends StatelessWidget {
   final String title;
   TextEditingController controller;
   FocusNode focusNode;
   TextInputType inputType;
-  AppMainTextField({
+  final String hint;
+  AppModifyTextField({
+    this.hint = '',
     required this.title,
     required this.controller,
     required this.focusNode,
@@ -20,7 +22,7 @@ class AppMainTextField extends StatelessWidget {
     return TextField(
       keyboardType: inputType,
       style: AppLightTextStyle.appTextFieldContent,
-      controller: controller,
+      controller: controller..text = hint,
       focusNode: focusNode,
       decoration: InputDecoration(
         contentPadding:

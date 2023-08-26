@@ -3,16 +3,15 @@ import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
 
-class AppCardItem2 extends StatelessWidget {
+class AppCardItem3 extends StatelessWidget {
   final String category;
   final String title;
   final String description;
-  final Widget modify;
-  AppCardItem2(
-      {this.category = '',
-      required this.title,
-      required this.description,
-      required this.modify});
+  AppCardItem3({
+    this.category = '',
+    required this.title,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +39,9 @@ class AppCardItem2 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text('$title :   ', style: AppLightTextStyle.appCardItemContent1),
-              const Text(AppStrings.title,
+              const Text(AppStrings.price,
                   style: AppLightTextStyle.appCardItemContent2),
             ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [modify],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

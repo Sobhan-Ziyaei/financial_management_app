@@ -1,10 +1,8 @@
-
-
 import 'package:objectbox/objectbox.dart';
 import 'package:work_report_app/data/models/user_item.dart';
 
 @Entity()
-class FinancialItem {
+class UserFinancialItem {
   @Id()
   int id;
 
@@ -12,5 +10,5 @@ class FinancialItem {
   String? description;
   final item = ToOne<UserItem>();
 
-  FinancialItem({this.id = 0, this.amount, this.description});
+  UserFinancialItem({this.id = 0, this.amount, this.description});
 }

@@ -22,37 +22,6 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 4228549374755142210),
-      name: 'FinancialItem',
-      lastPropertyId: const IdUid(4, 3094017730294721028),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 852269246544459326),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 1374442493824593795),
-            name: 'amount',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 290467816034440049),
-            name: 'description',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 3094017730294721028),
-            name: 'itemId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(1, 1043972585507122083),
-            relationTarget: 'UserItem')
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
       id: const IdUid(2, 4474380120461272255),
       name: 'UserCategory',
       lastPropertyId: const IdUid(4, 7125733078995242716),
@@ -120,6 +89,42 @@ final _entities = <ModelEntity>[
             indexId: const IdUid(2, 1143964970371906005),
             relationTarget: 'UserCategory')
       ],
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(2, 8338832137809488506),
+            name: 'financialItem',
+            targetId: const IdUid(4, 3895493335781458481))
+      ],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(4, 3895493335781458481),
+      name: 'UserFinancialItem',
+      lastPropertyId: const IdUid(4, 5099608274133152852),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 6964951509522846567),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 2397990375380155432),
+            name: 'amount',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 8226837009802152727),
+            name: 'description',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 5099608274133152852),
+            name: 'itemId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(3, 3202762272567961640),
+            relationTarget: 'UserItem')
+      ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
@@ -151,60 +156,26 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(3, 7747437729085487469),
-      lastIndexId: const IdUid(2, 1143964970371906005),
-      lastRelationId: const IdUid(1, 6944106862447846046),
+      lastEntityId: const IdUid(4, 3895493335781458481),
+      lastIndexId: const IdUid(3, 3202762272567961640),
+      lastRelationId: const IdUid(2, 8338832137809488506),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [4228549374755142210],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [
+        852269246544459326,
+        1374442493824593795,
+        290467816034440049,
+        3094017730294721028
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, EntityDefinition>{
-    FinancialItem: EntityDefinition<FinancialItem>(
-        model: _entities[0],
-        toOneRelations: (FinancialItem object) => [object.item],
-        toManyRelations: (FinancialItem object) => {},
-        getId: (FinancialItem object) => object.id,
-        setId: (FinancialItem object, int id) {
-          object.id = id;
-        },
-        objectToFB: (FinancialItem object, fb.Builder fbb) {
-          final amountOffset =
-              object.amount == null ? null : fbb.writeString(object.amount!);
-          final descriptionOffset = object.description == null
-              ? null
-              : fbb.writeString(object.description!);
-          fbb.startTable(5);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, amountOffset);
-          fbb.addOffset(2, descriptionOffset);
-          fbb.addInt64(3, object.item.targetId);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final idParam =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-          final amountParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 6);
-          final descriptionParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8);
-          final object = FinancialItem(
-              id: idParam, amount: amountParam, description: descriptionParam);
-          object.item.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          object.item.attach(store);
-          return object;
-        }),
     UserCategory: EntityDefinition<UserCategory>(
-        model: _entities[1],
+        model: _entities[0],
         toOneRelations: (UserCategory object) => [],
         toManyRelations: (UserCategory object) =>
             {RelInfo<UserCategory>.toMany(1, object.id): object.items},
@@ -250,9 +221,10 @@ ModelDefinition getObjectBoxModel() {
           return object;
         }),
     UserItem: EntityDefinition<UserItem>(
-        model: _entities[2],
+        model: _entities[1],
         toOneRelations: (UserItem object) => [object.category],
-        toManyRelations: (UserItem object) => {},
+        toManyRelations: (UserItem object) =>
+            {RelInfo<UserItem>.toMany(2, object.id): object.financialItem},
         getId: (UserItem object) => object.id,
         setId: (UserItem object, int id) {
           object.id = id;
@@ -277,6 +249,8 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final typeParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 6);
           final titleParam = const fb.StringReader(asciiOptimization: true)
@@ -285,11 +259,54 @@ ModelDefinition getObjectBoxModel() {
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 10);
           final object = UserItem(
-              type: typeParam, title: titleParam, description: descriptionParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+              id: idParam,
+              type: typeParam,
+              title: titleParam,
+              description: descriptionParam);
           object.category.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           object.category.attach(store);
+          InternalToManyAccess.setRelInfo<UserItem>(object.financialItem, store,
+              RelInfo<UserItem>.toMany(2, object.id));
+          return object;
+        }),
+    UserFinancialItem: EntityDefinition<UserFinancialItem>(
+        model: _entities[2],
+        toOneRelations: (UserFinancialItem object) => [object.item],
+        toManyRelations: (UserFinancialItem object) => {},
+        getId: (UserFinancialItem object) => object.id,
+        setId: (UserFinancialItem object, int id) {
+          object.id = id;
+        },
+        objectToFB: (UserFinancialItem object, fb.Builder fbb) {
+          final amountOffset =
+              object.amount == null ? null : fbb.writeString(object.amount!);
+          final descriptionOffset = object.description == null
+              ? null
+              : fbb.writeString(object.description!);
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, amountOffset);
+          fbb.addOffset(2, descriptionOffset);
+          fbb.addInt64(3, object.item.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final amountParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final descriptionParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8);
+          final object = UserFinancialItem(
+              id: idParam, amount: amountParam, description: descriptionParam);
+          object.item.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.item.attach(store);
           return object;
         })
   };
@@ -297,65 +314,69 @@ ModelDefinition getObjectBoxModel() {
   return ModelDefinition(model, bindings);
 }
 
-/// [FinancialItem] entity fields to define ObjectBox queries.
-class FinancialItem_ {
-  /// see [FinancialItem.id]
-  static final id =
-      QueryIntegerProperty<FinancialItem>(_entities[0].properties[0]);
-
-  /// see [FinancialItem.amount]
-  static final amount =
-      QueryStringProperty<FinancialItem>(_entities[0].properties[1]);
-
-  /// see [FinancialItem.description]
-  static final description =
-      QueryStringProperty<FinancialItem>(_entities[0].properties[2]);
-
-  /// see [FinancialItem.item]
-  static final item =
-      QueryRelationToOne<FinancialItem, UserItem>(_entities[0].properties[3]);
-}
-
 /// [UserCategory] entity fields to define ObjectBox queries.
 class UserCategory_ {
   /// see [UserCategory.id]
   static final id =
-      QueryIntegerProperty<UserCategory>(_entities[1].properties[0]);
+      QueryIntegerProperty<UserCategory>(_entities[0].properties[0]);
 
   /// see [UserCategory.type]
   static final type =
-      QueryStringProperty<UserCategory>(_entities[1].properties[1]);
+      QueryStringProperty<UserCategory>(_entities[0].properties[1]);
 
   /// see [UserCategory.title]
   static final title =
-      QueryStringProperty<UserCategory>(_entities[1].properties[2]);
+      QueryStringProperty<UserCategory>(_entities[0].properties[2]);
 
   /// see [UserCategory.description]
   static final description =
-      QueryStringProperty<UserCategory>(_entities[1].properties[3]);
+      QueryStringProperty<UserCategory>(_entities[0].properties[3]);
 
   /// see [UserCategory.items]
   static final items =
-      QueryRelationToMany<UserCategory, UserItem>(_entities[1].relations[0]);
+      QueryRelationToMany<UserCategory, UserItem>(_entities[0].relations[0]);
 }
 
 /// [UserItem] entity fields to define ObjectBox queries.
 class UserItem_ {
   /// see [UserItem.id]
-  static final id = QueryIntegerProperty<UserItem>(_entities[2].properties[0]);
+  static final id = QueryIntegerProperty<UserItem>(_entities[1].properties[0]);
 
   /// see [UserItem.type]
-  static final type = QueryStringProperty<UserItem>(_entities[2].properties[1]);
+  static final type = QueryStringProperty<UserItem>(_entities[1].properties[1]);
 
   /// see [UserItem.title]
   static final title =
-      QueryStringProperty<UserItem>(_entities[2].properties[2]);
+      QueryStringProperty<UserItem>(_entities[1].properties[2]);
 
   /// see [UserItem.description]
   static final description =
-      QueryStringProperty<UserItem>(_entities[2].properties[3]);
+      QueryStringProperty<UserItem>(_entities[1].properties[3]);
 
   /// see [UserItem.category]
   static final category =
-      QueryRelationToOne<UserItem, UserCategory>(_entities[2].properties[4]);
+      QueryRelationToOne<UserItem, UserCategory>(_entities[1].properties[4]);
+
+  /// see [UserItem.financialItem]
+  static final financialItem = QueryRelationToMany<UserItem, UserFinancialItem>(
+      _entities[1].relations[0]);
+}
+
+/// [UserFinancialItem] entity fields to define ObjectBox queries.
+class UserFinancialItem_ {
+  /// see [UserFinancialItem.id]
+  static final id =
+      QueryIntegerProperty<UserFinancialItem>(_entities[2].properties[0]);
+
+  /// see [UserFinancialItem.amount]
+  static final amount =
+      QueryStringProperty<UserFinancialItem>(_entities[2].properties[1]);
+
+  /// see [UserFinancialItem.description]
+  static final description =
+      QueryStringProperty<UserFinancialItem>(_entities[2].properties[2]);
+
+  /// see [UserFinancialItem.item]
+  static final item = QueryRelationToOne<UserFinancialItem, UserItem>(
+      _entities[2].properties[3]);
 }

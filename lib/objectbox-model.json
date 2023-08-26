@@ -4,38 +4,6 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:4228549374755142210",
-      "lastPropertyId": "4:3094017730294721028",
-      "name": "FinancialItem",
-      "properties": [
-        {
-          "id": "1:852269246544459326",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:1374442493824593795",
-          "name": "amount",
-          "type": 9
-        },
-        {
-          "id": "3:290467816034440049",
-          "name": "description",
-          "type": 9
-        },
-        {
-          "id": "4:3094017730294721028",
-          "name": "itemId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:1043972585507122083",
-          "relationTarget": "UserItem"
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "2:4474380120461272255",
       "lastPropertyId": "4:7125733078995242716",
       "name": "UserCategory",
@@ -105,18 +73,63 @@
           "relationTarget": "UserCategory"
         }
       ],
+      "relations": [
+        {
+          "id": "2:8338832137809488506",
+          "name": "financialItem",
+          "targetId": "4:3895493335781458481"
+        }
+      ]
+    },
+    {
+      "id": "4:3895493335781458481",
+      "lastPropertyId": "4:5099608274133152852",
+      "name": "UserFinancialItem",
+      "properties": [
+        {
+          "id": "1:6964951509522846567",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2397990375380155432",
+          "name": "amount",
+          "type": 9
+        },
+        {
+          "id": "3:8226837009802152727",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:5099608274133152852",
+          "name": "itemId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:3202762272567961640",
+          "relationTarget": "UserItem"
+        }
+      ],
       "relations": []
     }
   ],
-  "lastEntityId": "3:7747437729085487469",
-  "lastIndexId": "2:1143964970371906005",
-  "lastRelationId": "1:6944106862447846046",
+  "lastEntityId": "4:3895493335781458481",
+  "lastIndexId": "3:3202762272567961640",
+  "lastRelationId": "2:8338832137809488506",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    4228549374755142210
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    852269246544459326,
+    1374442493824593795,
+    290467816034440049,
+    3094017730294721028
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
