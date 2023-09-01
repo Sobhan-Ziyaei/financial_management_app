@@ -201,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      sha256: "55106e8290acaa97ed15bea1fdad82c3cf0c248dd410e651f5a8ac6870f783ab"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -270,6 +278,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.1"
+  flutter_linear_datepicker:
+    dependency: "direct main"
+    description:
+      name: flutter_linear_datepicker
+      sha256: "3c868801330f6452da69802daa8b6e27a9c308f5e193a1726ed621607cbc6056"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -339,6 +355,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   io:
     dependency: transitive
     description:
@@ -499,6 +523,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  persian_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: persian_datetime_picker
+      sha256: dc9c2bbcecef594a7453307d8b41781af4c667da88e23d560e540ae3b8d8fe20
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  persian_horizontal_date_picker:
+    dependency: "direct main"
+    description:
+      name: persian_horizontal_date_picker
+      sha256: "19efd0e64e58bc861789687b8d65262c8a3b68658069e5e7b2d6f74ee11e057e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.7"
   petitparser:
     dependency: transitive
     description:
@@ -547,6 +587,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  scroll_to_index:
+    dependency: transitive
+    description:
+      name: scroll_to_index
+      sha256: b707546e7500d9f070d63e5acf74fd437ec7eeeb68d3412ef7b0afada0b4f176
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
+  shamsi_date:
+    dependency: "direct main"
+    description:
+      name: shamsi_date
+      sha256: "938bd68e6f99fab7f93c04a0fc4248a09355f67eca90510f0ee7579f6014b56c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   shelf:
     dependency: transitive
     description:

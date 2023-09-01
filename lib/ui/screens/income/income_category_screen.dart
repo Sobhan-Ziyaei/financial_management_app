@@ -24,19 +24,18 @@ class _IncomeCategoryScreenState extends State<IncomeCategoryScreen> {
   String selectedDescription = '';
   int? selectedId;
   String? type;
+  final List<UserCategory> itemList = [];
   final categoriesNotifier = ValueNotifier([]);
   @override
   void initState() {
     categoriesNotifier.value = categoryBox.getAll();
+    getData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    QueryBuilder<UserCategory> builder =
-        categoryBox.query(UserCategory_.type.equals(AppStrings.income));
-    Query<UserCategory> query = builder.build();
     return Scaffold(
       backgroundColor: AppColors.mainBackground,
       appBar: AppMainAppBar(
@@ -58,9 +57,17 @@ class _IncomeCategoryScreenState extends State<IncomeCategoryScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => RegisterCategoryScreen(
-                            type: AppStrings.income,
-                            categoriesNotifier: categoriesNotifier),
+                          type: AppStrings.income,
+                          categoriesNotifier: categoriesNotifier,
+                        ),
                       ),
+                    ).then(
+                      (value) {
+                        if (value == true) {
+                          itemList.clear();
+                          getData();
+                        }
+                      },
                     );
                   },
                   text: AppStrings.registerNewCategory),
@@ -73,23 +80,23 @@ class _IncomeCategoryScreenState extends State<IncomeCategoryScreen> {
                   valueListenable: categoriesNotifier,
                   builder: (context, value, child) {
                     return ListView.builder(
-                      itemCount: query.find().length,
+                      itemCount: itemList.length,
                       itemBuilder: (context, index) {
                         return Dismissible(
                           key: UniqueKey(),
                           onDismissed: (direction) {
-                            categoryBox.remove(query.find()[index].id);
+                            categoryBox.remove(itemList[index].id);
                           },
                           child: AppCardItem2(
-                            title: '${query.find()[index].title}',
-                            description: '${query.find()[index].description}',
+                            title: '${itemList[index].title}',
+                            description: '${itemList[index].description}',
                             modify: InkWell(
                               onTap: () {
                                 setState(() {
-                                  selectedId = query.find()[index].id;
+                                  selectedId = itemList[index].id;
                                   selectedTitle =
                                       categoryBox.get(selectedId!)!.title!;
-                                  type = query.find()[index].type;
+                                  type = itemList[index].type;
                                   selectedDescription = categoryBox
                                       .get(selectedId!)!
                                       .description!;
@@ -104,6 +111,13 @@ class _IncomeCategoryScreenState extends State<IncomeCategoryScreen> {
                                         defaultDescription: selectedDescription,
                                         id: selectedId!),
                                   ),
+                                ).then(
+                                  (value) {
+                                    if (value == true) {
+                                      itemList.clear();
+                                      getData();
+                                    }
+                                  },
                                 );
                               },
                               child: Container(
@@ -131,5 +145,14 @@ class _IncomeCategoryScreenState extends State<IncomeCategoryScreen> {
         ),
       ),
     );
+  }
+
+  void getData() {
+    QueryBuilder<UserCategory> builder =
+        categoryBox.query(UserCategory_.type.equals(AppStrings.income));
+    Query<UserCategory> query = builder.build();
+    for (var element in query.find()) {
+      itemList.add(element);
+    }
   }
 }

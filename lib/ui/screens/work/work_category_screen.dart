@@ -24,19 +24,19 @@ class _WorkCategoryScreenState extends State<WorkCategoryScreen> {
   String selectedDescription = '';
   int? selectedId;
   String? type;
+  List<UserCategory> itemList = [];
   final categoriesNotifier = ValueNotifier([]);
   @override
   void initState() {
     categoriesNotifier.value = categoryBox.getAll();
+    getData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    QueryBuilder<UserCategory> builder =
-        categoryBox.query(UserCategory_.type.equals(AppStrings.work));
-    Query<UserCategory> query = builder.build();
+
     return Scaffold(
       backgroundColor: AppColors.mainBackground,
       appBar: AppMainAppBar(
@@ -58,9 +58,17 @@ class _WorkCategoryScreenState extends State<WorkCategoryScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => RegisterCategoryScreen(
-                            type: AppStrings.work,
-                            categoriesNotifier: categoriesNotifier),
+                          type: AppStrings.work,
+                          categoriesNotifier: categoriesNotifier,
+                        ),
                       ),
+                    ).then(
+                      (value) {
+                        if (value == true) {
+                          itemList.clear();
+                          getData();
+                        }
+                      },
                     );
                   },
                   text: AppStrings.registerNewCategory),
@@ -73,23 +81,23 @@ class _WorkCategoryScreenState extends State<WorkCategoryScreen> {
                   valueListenable: categoriesNotifier,
                   builder: (context, value, child) {
                     return ListView.builder(
-                      itemCount: query.find().length,
+                      itemCount: itemList.length,
                       itemBuilder: (context, index) {
                         return Dismissible(
                           key: UniqueKey(),
                           onDismissed: (direction) {
-                            categoryBox.remove(query.find()[index].id);
+                            categoryBox.remove(itemList[index].id);
                           },
                           child: AppCardItem2(
-                            title: '${query.find()[index].title}',
-                            description: '${query.find()[index].description}',
+                            title: '${itemList[index].title}',
+                            description: '${itemList[index].description}',
                             modify: InkWell(
                               onTap: () {
                                 setState(() {
-                                  selectedId = query.find()[index].id;
+                                  selectedId = itemList[index].id;
                                   selectedTitle =
                                       categoryBox.get(selectedId!)!.title!;
-                                  type = query.find()[index].type;
+                                  type = itemList[index].type;
                                   selectedDescription = categoryBox
                                       .get(selectedId!)!
                                       .description!;
@@ -104,6 +112,13 @@ class _WorkCategoryScreenState extends State<WorkCategoryScreen> {
                                         defaultDescription: selectedDescription,
                                         id: selectedId!),
                                   ),
+                                ).then(
+                                  (value) {
+                                    if (value == true) {
+                                      itemList.clear();
+                                      getData();
+                                    }
+                                  },
                                 );
                               },
                               child: Container(
@@ -131,5 +146,14 @@ class _WorkCategoryScreenState extends State<WorkCategoryScreen> {
         ),
       ),
     );
+  }
+
+  void getData() {
+    QueryBuilder<UserCategory> builder =
+        categoryBox.query(UserCategory_.type.equals(AppStrings.work));
+    Query<UserCategory> query = builder.build();
+    for (var element in query.find()) {
+      itemList.add(element);
+    }
   }
 }

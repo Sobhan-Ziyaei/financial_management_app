@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:work_report_app/data/models/user_category.dart';
-import 'package:work_report_app/data/models/user_item.dart';
 import 'package:work_report_app/main.dart';
 import 'package:work_report_app/objectbox.g.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
@@ -21,14 +20,15 @@ class CostCategoryScreen extends StatefulWidget {
 
 class _CostCategoryScreenState extends State<CostCategoryScreen> {
   final categoryBox = objectBox.store.box<UserCategory>();
-  final itemBox = objectBox.store.box<UserItem>();
   String selectedTitle = '';
   String selectedDescription = '';
   int? selectedId;
-  String? type ;
+  String? type;
+  List<UserCategory> categoryList = [];
   final categoriesNotifier = ValueNotifier([]);
   @override
   void initState() {
+    getData();
     categoriesNotifier.value = categoryBox.getAll();
     super.initState();
   }
@@ -36,9 +36,6 @@ class _CostCategoryScreenState extends State<CostCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    QueryBuilder<UserCategory> builder =
-        categoryBox.query(UserCategory_.type.equals('هزینه'));
-    Query<UserCategory> query = builder.build();
     return Scaffold(
       backgroundColor: AppColors.mainBackground,
       appBar: AppMainAppBar(
@@ -60,77 +57,86 @@ class _CostCategoryScreenState extends State<CostCategoryScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => RegisterCategoryScreen(
-                            type: AppStrings.cost,
-                            categoriesNotifier: categoriesNotifier),
+                          type: AppStrings.cost,
+                          categoriesNotifier: categoriesNotifier,
+                        ),
                       ),
-                    );
+                    ).then((value) {
+                      if (value == true) {
+                        categoryList.clear();
+                        getData();
+                      }
+                    });
                   },
                   text: AppStrings.registerNewCategory),
               const SizedBox(height: 50),
               const Text(AppStrings.categoryList,
                   style: AppLightTextStyle.appMainTitle),
-              SizedBox(
-                height: 1000,
-                child: ValueListenableBuilder(
-                  valueListenable: categoriesNotifier,
-                  builder: (context, value, child) {
-                    return ListView.builder(
-                      itemCount: query.find().length,
-                      itemBuilder: (context, index) {
-                        return Dismissible(
-                          key: UniqueKey(),
-                          onDismissed: (direction) {
-                            setState(() {
-                              categoryBox.remove(query.find()[index].id);
-
-                            });
-                          },
-                          child: AppCardItem2(
-                            title: '${query.find()[index].title}',
-                            description: '${query.find()[index].description}',
-                            modify: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  selectedId = query.find()[index].id;
-                                  type = query.find()[index].type ;
-                                  selectedTitle =
-                                      categoryBox.get(selectedId!)!.title!;
-                                  selectedDescription = categoryBox
-                                      .get(selectedId!)!
-                                      .description!;
-                                });
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ModifyCategoryScreen(
-                                      categoriesNotifier: categoriesNotifier,
-                                      defaultTitle: selectedTitle,
-                                      defaultDescription: selectedDescription,
-                                      id: selectedId!,
-                                      type: type!,
-                                    ),
+              ValueListenableBuilder(
+                valueListenable: categoriesNotifier,
+                builder: (context, value, child) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: categoryList.length,
+                    itemBuilder: (context, index) {
+                      return Dismissible(
+                        key: UniqueKey(),
+                        onDismissed: (direction) {
+                          setState(() {
+                            categoryBox.remove(categoryList[index].id);
+                          });
+                        },
+                        child: AppCardItem2(
+                          title: '${categoryList[index].title}',
+                          description: '${categoryList[index].description}',
+                          modify: InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedId = categoryList[index].id;
+                                type = categoryList[index].type;
+                                selectedTitle =
+                                    categoryBox.get(selectedId!)!.title!;
+                                selectedDescription =
+                                    categoryBox.get(selectedId!)!.description!;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ModifyCategoryScreen(
+                                    categoriesNotifier: categoriesNotifier,
+                                    defaultTitle: selectedTitle,
+                                    defaultDescription: selectedDescription,
+                                    id: selectedId!,
+                                    type: type!,
                                   ),
-                                );
-                              },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.green,
-                                  shape: BoxShape.circle,
                                 ),
-                                child: const Center(
-                                  child: Text(AppStrings.modify,
-                                      style: AppLightTextStyle.appModifyButton),
-                                ),
+                              ).then(
+                                (value) {
+                                  if (value == true) {
+                                    categoryList.clear();
+                                    getData();
+                                  }
+                                },
+                              );
+                            },
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: AppColors.green,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(AppStrings.modify,
+                                    style: AppLightTextStyle.appModifyButton),
                               ),
                             ),
                           ),
-                        );
-                      },
-                    );
-                  },
-                ),
+                        ),
+                      );
+                    },
+                  );
+                },
               )
             ],
           ),
@@ -139,4 +145,12 @@ class _CostCategoryScreenState extends State<CostCategoryScreen> {
     );
   }
 
+  void getData() {
+    QueryBuilder<UserCategory> builder =
+        categoryBox.query(UserCategory_.type.equals(AppStrings.cost));
+    Query<UserCategory> query = builder.build();
+    for (var element in query.find()) {
+      categoryList.add(element);
+    }
+  }
 }

@@ -10,6 +10,7 @@ import 'package:work_report_app/ui/constants/app_strings.dart';
 import 'package:work_report_app/ui/screens/modify_item_screen.dart';
 import 'package:work_report_app/ui/screens/item_screen.dart';
 import 'package:work_report_app/ui/widgets/app_card_item2.dart';
+import 'package:work_report_app/ui/widgets/app_item_card.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
 
@@ -86,7 +87,7 @@ class _CostScreenState extends State<CostScreen> {
                           onDismissed: (direction) {
                             itemBox.remove(itemList[index].id);
                           },
-                          child: AppCardItem2(
+                          child: AppItemCard(
                             category:
                                 '${itemList[index].category.target?.title}',
                             title: '${itemList[index].title}',
@@ -112,12 +113,14 @@ class _CostScreenState extends State<CostScreen> {
                                         defaultDescription: selectedDescription,
                                         id: selectedId!),
                                   ),
-                                ).then((value) {
-                                  if (value == true) {
-                                    itemList.clear();
-                                    getData();
-                                  }
-                                });
+                                ).then(
+                                  (value) {
+                                    if (value == true) {
+                                      itemList.clear();
+                                      getData();
+                                    }
+                                  },
+                                );
                               },
                               child: Container(
                                 width: 50,
@@ -147,12 +150,11 @@ class _CostScreenState extends State<CostScreen> {
   }
 
   getData() {
-    QueryBuilder<UserItem> builder = itemBox.query();
+    QueryBuilder<UserItem> builder =
+        itemBox.query(UserItem_.type.equals(AppStrings.cost));
     Query<UserItem> query = builder.build();
     for (var element in query.find()) {
-      if (element.category.target?.type == AppStrings.cost) {
-        itemList.add(element);
-      }
+      itemList.add(element);
     }
   }
 }

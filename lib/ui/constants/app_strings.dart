@@ -7,6 +7,7 @@ class AppStrings {
   static const price = 'مبلغ';
   static const definitions = 'تعاریف';
   static const reports = 'گزارشات';
+  static const category = 'دسته‌بندی';
   static const costCategory = 'دسته‌بندی هزینه‌ها';
   static const costs = 'هزینه‌ها';
   static const incomeCategory = 'دسته‌بندی درآمدها';
@@ -36,4 +37,10 @@ class AppStrings {
   static const registerNewWorkFinancialItem = 'ثبت آیتم اقتصادی کار';
   static const report = 'گزارش';
   static const reportSearchTitle = 'سرچ کنید';
+  static const setStartDate = 'انتخاب تاریخ شروع';
+  static const setEndDate = 'انتخاب تاریخ پایان';
+  static const filterDate = 'فیلتر کردن تاریخ';
+  static const deleteFilterDate = 'حذف کردن فیلتر';
+  static const date = 'تاریخ';
+  static const thisMonth = 'لیست ماه جاری';
 }

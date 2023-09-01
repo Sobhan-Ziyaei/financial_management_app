@@ -17,6 +17,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import 'data/models/user_category.dart';
 import 'data/models/user_financial_item.dart';
 import 'data/models/user_item.dart';
+import 'data/models/user_work_item.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -99,7 +100,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(4, 3895493335781458481),
       name: 'UserFinancialItem',
-      lastPropertyId: const IdUid(4, 5099608274133152852),
+      lastPropertyId: const IdUid(8, 1490969158113310321),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -123,6 +124,62 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(3, 3202762272567961640),
+            relationTarget: 'UserItem'),
+        ModelProperty(
+            id: const IdUid(5, 7804851258891793720),
+            name: 'date',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 2216703801095526059),
+            name: 'year',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 8766141389535259669),
+            name: 'month',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(8, 1490969158113310321),
+            name: 'day',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(5, 7106698758550502341),
+      name: 'UserWorkItem',
+      lastPropertyId: const IdUid(5, 3024908084008019346),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 3680039090176662234),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 7839540658406756998),
+            name: 'begin',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 7747245824332721632),
+            name: 'end',
+            type: 10,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 3377597757378628690),
+            name: 'description',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 3024908084008019346),
+            name: 'itemId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(4, 7194020369344260932),
             relationTarget: 'UserItem')
       ],
       relations: <ModelRelation>[],
@@ -156,8 +213,8 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(4, 3895493335781458481),
-      lastIndexId: const IdUid(3, 3202762272567961640),
+      lastEntityId: const IdUid(5, 7106698758550502341),
+      lastIndexId: const IdUid(4, 7194020369344260932),
       lastRelationId: const IdUid(2, 8338832137809488506),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [4228549374755142210],
@@ -284,17 +341,29 @@ ModelDefinition getObjectBoxModel() {
           final descriptionOffset = object.description == null
               ? null
               : fbb.writeString(object.description!);
-          fbb.startTable(5);
+          final yearOffset =
+              object.year == null ? null : fbb.writeString(object.year!);
+          final monthOffset =
+              object.month == null ? null : fbb.writeString(object.month!);
+          final dayOffset =
+              object.day == null ? null : fbb.writeString(object.day!);
+          fbb.startTable(9);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, amountOffset);
           fbb.addOffset(2, descriptionOffset);
           fbb.addInt64(3, object.item.targetId);
+          fbb.addInt64(4, object.date?.millisecondsSinceEpoch);
+          fbb.addOffset(5, yearOffset);
+          fbb.addOffset(6, monthOffset);
+          fbb.addOffset(7, dayOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
+          final dateValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final amountParam = const fb.StringReader(asciiOptimization: true)
@@ -302,10 +371,74 @@ ModelDefinition getObjectBoxModel() {
           final descriptionParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 8);
+          final dateParam = dateValue == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(dateValue);
+          final yearParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final monthParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 16);
+          final dayParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 18);
           final object = UserFinancialItem(
-              id: idParam, amount: amountParam, description: descriptionParam);
+              id: idParam,
+              amount: amountParam,
+              description: descriptionParam,
+              date: dateParam,
+              year: yearParam,
+              month: monthParam,
+              day: dayParam);
           object.item.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.item.attach(store);
+          return object;
+        }),
+    UserWorkItem: EntityDefinition<UserWorkItem>(
+        model: _entities[3],
+        toOneRelations: (UserWorkItem object) => [object.item],
+        toManyRelations: (UserWorkItem object) => {},
+        getId: (UserWorkItem object) => object.id,
+        setId: (UserWorkItem object, int id) {
+          object.id = id;
+        },
+        objectToFB: (UserWorkItem object, fb.Builder fbb) {
+          final descriptionOffset = object.description == null
+              ? null
+              : fbb.writeString(object.description!);
+          fbb.startTable(6);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(1, object.begin?.millisecondsSinceEpoch);
+          fbb.addInt64(2, object.end?.millisecondsSinceEpoch);
+          fbb.addOffset(3, descriptionOffset);
+          fbb.addInt64(4, object.item.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final beginValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 6);
+          final endValue =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 8);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final beginParam = beginValue == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(beginValue);
+          final endParam = endValue == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(endValue);
+          final descriptionParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 10);
+          final object = UserWorkItem(
+              id: idParam,
+              begin: beginParam,
+              end: endParam,
+              description: descriptionParam);
+          object.item.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           object.item.attach(store);
           return object;
         })
@@ -379,4 +512,43 @@ class UserFinancialItem_ {
   /// see [UserFinancialItem.item]
   static final item = QueryRelationToOne<UserFinancialItem, UserItem>(
       _entities[2].properties[3]);
+
+  /// see [UserFinancialItem.date]
+  static final date =
+      QueryIntegerProperty<UserFinancialItem>(_entities[2].properties[4]);
+
+  /// see [UserFinancialItem.year]
+  static final year =
+      QueryStringProperty<UserFinancialItem>(_entities[2].properties[5]);
+
+  /// see [UserFinancialItem.month]
+  static final month =
+      QueryStringProperty<UserFinancialItem>(_entities[2].properties[6]);
+
+  /// see [UserFinancialItem.day]
+  static final day =
+      QueryStringProperty<UserFinancialItem>(_entities[2].properties[7]);
+}
+
+/// [UserWorkItem] entity fields to define ObjectBox queries.
+class UserWorkItem_ {
+  /// see [UserWorkItem.id]
+  static final id =
+      QueryIntegerProperty<UserWorkItem>(_entities[3].properties[0]);
+
+  /// see [UserWorkItem.begin]
+  static final begin =
+      QueryIntegerProperty<UserWorkItem>(_entities[3].properties[1]);
+
+  /// see [UserWorkItem.end]
+  static final end =
+      QueryIntegerProperty<UserWorkItem>(_entities[3].properties[2]);
+
+  /// see [UserWorkItem.description]
+  static final description =
+      QueryStringProperty<UserWorkItem>(_entities[3].properties[3]);
+
+  /// see [UserWorkItem.item]
+  static final item =
+      QueryRelationToOne<UserWorkItem, UserItem>(_entities[3].properties[4]);
 }

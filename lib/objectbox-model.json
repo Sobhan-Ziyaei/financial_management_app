@@ -83,7 +83,7 @@
     },
     {
       "id": "4:3895493335781458481",
-      "lastPropertyId": "4:5099608274133152852",
+      "lastPropertyId": "8:1490969158113310321",
       "name": "UserFinancialItem",
       "properties": [
         {
@@ -109,13 +109,70 @@
           "flags": 520,
           "indexId": "3:3202762272567961640",
           "relationTarget": "UserItem"
+        },
+        {
+          "id": "5:7804851258891793720",
+          "name": "date",
+          "type": 10
+        },
+        {
+          "id": "6:2216703801095526059",
+          "name": "year",
+          "type": 9
+        },
+        {
+          "id": "7:8766141389535259669",
+          "name": "month",
+          "type": 9
+        },
+        {
+          "id": "8:1490969158113310321",
+          "name": "day",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:7106698758550502341",
+      "lastPropertyId": "5:3024908084008019346",
+      "name": "UserWorkItem",
+      "properties": [
+        {
+          "id": "1:3680039090176662234",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7839540658406756998",
+          "name": "begin",
+          "type": 10
+        },
+        {
+          "id": "3:7747245824332721632",
+          "name": "end",
+          "type": 10
+        },
+        {
+          "id": "4:3377597757378628690",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:3024908084008019346",
+          "name": "itemId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:7194020369344260932",
+          "relationTarget": "UserItem"
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "4:3895493335781458481",
-  "lastIndexId": "3:3202762272567961640",
+  "lastEntityId": "5:7106698758550502341",
+  "lastIndexId": "4:7194020369344260932",
   "lastRelationId": "2:8338832137809488506",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

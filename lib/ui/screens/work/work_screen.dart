@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:work_report_app/data/models/user_category.dart';
 import 'package:work_report_app/data/models/user_item.dart';
 import 'package:work_report_app/main.dart';
@@ -7,9 +6,11 @@ import 'package:work_report_app/objectbox.g.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
-import 'package:work_report_app/ui/screens/modify_item_screen.dart';
 import 'package:work_report_app/ui/screens/item_screen.dart';
+import 'package:work_report_app/ui/screens/modify_item_screen.dart';
+import 'package:work_report_app/ui/screens/work/register_work_item_screen.dart';
 import 'package:work_report_app/ui/widgets/app_card_item2.dart';
+import 'package:work_report_app/ui/widgets/app_item_card.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
 
@@ -62,12 +63,22 @@ class _WorkScreenState extends State<WorkScreen> {
                         builder: (context) => ItemScreen(
                             type: AppStrings.work, itemNotifier: itemNotifier),
                       ),
-                    ).then((value) {
-                      if (value == true) {
-                        itemList.clear();
-                        getData();
-                      }
-                    });
+                    ).then(
+                      (value) {
+                        if (value == true) {
+                          itemList.clear();
+                          getData();
+                        }
+                      },
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return RegisterWorkItemScreen();
+                        },
+                      ),
+                    );
                   },
                   text: AppStrings.registerNewWork),
               const SizedBox(height: 30),
@@ -86,7 +97,7 @@ class _WorkScreenState extends State<WorkScreen> {
                           onDismissed: (direction) {
                             itemBox.remove(itemList[index].id);
                           },
-                          child: AppCardItem2(
+                          child: AppItemCard(
                             category:
                                 '${itemList[index].category.target?.title}',
                             title: '${itemList[index].title}',
@@ -147,12 +158,11 @@ class _WorkScreenState extends State<WorkScreen> {
   }
 
   getData() {
-    QueryBuilder<UserItem> builder = itemBox.query();
+    QueryBuilder<UserItem> builder =
+        itemBox.query(UserItem_.type.equals(AppStrings.work));
     Query<UserItem> query = builder.build();
     for (var element in query.find()) {
-      if (element.category.target?.type == AppStrings.work) {
-        itemList.add(element);
-      }
+      itemList.add(element);
     }
   }
 }

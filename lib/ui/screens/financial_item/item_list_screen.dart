@@ -3,6 +3,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:work_report_app/data/models/user_financial_item.dart';
 import 'package:work_report_app/data/models/user_item.dart';
 import 'package:work_report_app/main.dart';
+import 'package:work_report_app/objectbox.g.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
@@ -11,6 +12,7 @@ import 'package:work_report_app/ui/screens/financial_item/register_finantial_ite
 import 'package:work_report_app/ui/widgets/app_card_item2.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
+import 'package:work_report_app/ui/widgets/buttons/app_small_black_button.dart';
 
 class ItemListScreen extends StatefulWidget {
   ItemListScreen({Key? key, required this.type}) : super(key: key);
@@ -55,11 +57,11 @@ class _ItemListScreenState extends State<ItemListScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 50),
-              // AppSmallBlackButton(
-              //     onPressed: () {
-              //       itemBox.removeAll();
-              //     },
-              //     text: 'Remove'),
+              AppSmallBlackButton(
+                  onPressed: () {
+                    itemBox.removeAll();
+                  },
+                  text: 'Remove'),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: itemList.length,
@@ -178,12 +180,11 @@ class _ItemListScreenState extends State<ItemListScreen> {
 
   void getData2() {
     QueryBuilder<UserFinancialItem> builder = financialItemBox.query();
+    builder.link(UserFinancialItem_.item, UserItem_.type.equals(widget.type));
     Query<UserFinancialItem> query = builder.build();
 
     for (var element in query.find()) {
-      if (element.item.target?.type == widget.type && itemList.isNotEmpty) {
-        financialItemList.add(element);
-      }
+      financialItemList.add(element);
     }
   }
 }

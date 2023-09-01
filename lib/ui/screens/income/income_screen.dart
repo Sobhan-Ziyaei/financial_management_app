@@ -10,6 +10,7 @@ import 'package:work_report_app/ui/constants/app_strings.dart';
 import 'package:work_report_app/ui/screens/modify_item_screen.dart';
 import 'package:work_report_app/ui/screens/item_screen.dart';
 import 'package:work_report_app/ui/widgets/app_card_item2.dart';
+import 'package:work_report_app/ui/widgets/app_item_card.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
 
@@ -87,7 +88,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           onDismissed: (direction) {
                             itemBox.remove(itemList[index].id);
                           },
-                          child: AppCardItem2(
+                          child: AppItemCard(
                             category:
                                 '${itemList[index].category.target?.title}',
                             title: '${itemList[index].title}',
@@ -148,12 +149,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
   }
 
   getData() {
-    QueryBuilder<UserItem> builder = itemBox.query();
+    QueryBuilder<UserItem> builder = itemBox.query(UserItem_.type.equals(AppStrings.income));
     Query<UserItem> query = builder.build();
     for (var element in query.find()) {
-      if (element.category.target?.type == AppStrings.income) {
-        itemList.add(element);
-      }
+      itemList.add(element);
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:work_report_app/route/names.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
 import 'package:work_report_app/ui/screens/item_screen.dart';
+import 'package:work_report_app/ui/screens/register_screen.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_small_black_button.dart';
@@ -45,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pushNamed(context, ScreenNames.definitionsScreen);
                 },
                 text: AppStrings.definitions),
+            const SizedBox(height: 50),
+            AppLargeBlackButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                      context, ScreenNames.financialItemTypeScreen);
+                },
+                text: AppStrings.registerNewFinancialItem),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,13 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: AppStrings.registerCost),
               ],
             ),
-            const SizedBox(height: 50),
-            AppLargeBlackButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, ScreenNames.financialItemTypeScreen);
-                },
-                text: AppStrings.registerNewFinancialItem),
             const SizedBox(height: 50),
             AppLargeBlackButton(
                 onPressed: () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
 import 'package:work_report_app/ui/screens/financial_item/item_list_screen.dart';
+import 'package:work_report_app/ui/screens/register_screen.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_large_black_button.dart';
 
@@ -37,7 +38,7 @@ class _FinancialItemTypeScreenState extends State<FinancialItemTypeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ItemListScreen(type: AppStrings.cost),
+                          RegisterScreen(type: AppStrings.cost),
                     ),
                   );
                 },
@@ -49,7 +50,7 @@ class _FinancialItemTypeScreenState extends State<FinancialItemTypeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ItemListScreen(type: AppStrings.income),
+                          RegisterScreen(type: AppStrings.income),
                     ),
                   );
                 },
@@ -61,7 +62,7 @@ class _FinancialItemTypeScreenState extends State<FinancialItemTypeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ItemListScreen(type: AppStrings.work),
+                          RegisterScreen(type: AppStrings.work),
                     ),
                   );
                 },

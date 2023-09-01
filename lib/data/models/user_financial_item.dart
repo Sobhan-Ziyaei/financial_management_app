@@ -8,7 +8,21 @@ class UserFinancialItem {
 
   String? amount;
   String? description;
+  DateTime? date;
+  
   final item = ToOne<UserItem>();
 
-  UserFinancialItem({this.id = 0, this.amount, this.description});
+  String? year;
+  String? month;
+  String? day;
+
+  UserFinancialItem(
+      {this.id = 0,
+      this.amount,
+      this.description,
+      this.date,
+      this.year,
+      this.month,
+      this.day,
+      });
 }

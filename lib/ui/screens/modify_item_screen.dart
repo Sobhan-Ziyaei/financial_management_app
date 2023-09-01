@@ -74,8 +74,9 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                 ),
                 AppGreenButton(
                     onPressed: () {
-                      modifyCategory(widget.id, titleController.text,
+                      modifyCategory( titleController.text,
                           descriptionController.text);
+                      widget.costsNotifier.value = itemBox.getAll();
                       Navigator.pop(context, true);
                     },
                     text: AppStrings.modify)
@@ -87,10 +88,11 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
     );
   }
 
-  void modifyCategory(int id, String title, String description) {
-    var item = UserItem(id: id, title: title, description: description);
-    item.category.target = widget.selectedCategory;
-    itemBox.put(item);
-    widget.costsNotifier.value = itemBox.getAll();
+  void modifyCategory( String title, String description) {
+    final UserItem? item = itemBox.get(widget.id);
+    item?.title = title ;
+    item?.description = description ;
+    item?.category.target = widget.selectedCategory ;
+    itemBox.put(item!) ;
   }
 }

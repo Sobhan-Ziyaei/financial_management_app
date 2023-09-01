@@ -9,6 +9,11 @@ class AppLightTextStyle {
     color: AppColors.black,
   );
 
+  static const TextStyle appMainTitleInRed = TextStyle(
+    fontFamily: FontFamily.mr,
+    fontSize: 16,
+    color: AppColors.red,
+  );
   static const TextStyle appGreenButton = TextStyle(
     fontFamily: FontFamily.mr,
     fontSize: 11,

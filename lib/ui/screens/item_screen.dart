@@ -66,7 +66,7 @@ class _ItemScreenState extends State<ItemScreen> {
                   onChanged: (value) {
                     print(value?.id.toString());
                     setState(() {
-                      selectedCategory = value!;
+                      selectedCategory = value;
                     });
                   },
                   items: titleList.map((cat) {

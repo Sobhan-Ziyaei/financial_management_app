@@ -80,7 +80,7 @@ class _RegisterCategoryScreenState extends State<RegisterCategoryScreen> {
                     final categoryBox = objectBox.store.box<UserCategory>();
                     categoryBox.put(category);
                     widget.categoriesNotifier.value = categoryBox.getAll();
-                    Navigator.pop(context);
+                    Navigator.pop(context,true);
                   },
                   text: AppStrings.save)
             ],

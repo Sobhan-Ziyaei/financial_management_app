@@ -74,7 +74,7 @@ class _ModifyCategoryScreenState extends State<ModifyCategoryScreen> {
                     onPressed: () {
                       modifyCategory(widget.id, titleController.text,
                           descriptionController.text,widget.type);
-                      Navigator.pop(context);
+                      Navigator.pop(context,true);
                     },
                     text: AppStrings.modify)
               ],
@@ -86,8 +86,11 @@ class _ModifyCategoryScreenState extends State<ModifyCategoryScreen> {
   }
 
   void modifyCategory(int id, String title, String description,String type) {
-    var categoty = UserCategory(id: id, title: title, description: description,type: type);
-    categoryBox.put(categoty);
-    widget.categoriesNotifier.value = categoryBox.getAll() ;
+    final UserCategory? category = categoryBox.get(widget.id);
+    category?.title = title ;
+    category?.description = description ;
+    category?.type = type ;
+    categoryBox.put(category!);
+    widget.categoriesNotifier.value = categoryBox.getAll();
   }
 }
