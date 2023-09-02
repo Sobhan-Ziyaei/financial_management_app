@@ -43,4 +43,5 @@ class AppStrings {
   static const deleteFilterDate = 'حذف کردن فیلتر';
   static const date = 'تاریخ';
   static const thisMonth = 'لیست ماه جاری';
+  static const biggestAmount = 'بیشترین مبلغ این ماه';
 }

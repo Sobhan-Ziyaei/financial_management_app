@@ -6,11 +6,13 @@ import 'package:work_report_app/ui/constants/app_strings.dart';
 class AppReportCard extends StatelessWidget {
   final String category;
   final String date;
+  final String title;
   final String amount;
   final String description;
   AppReportCard({
     required this.category,
     required this.description,
+    required this.title,
     required this.amount,
     required this.date,
   });
@@ -34,6 +36,14 @@ class AppReportCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(category, style: AppLightTextStyle.appMainTitle),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text('$title :   ', style: AppLightTextStyle.appCardItemContent1),
+              const Text(AppStrings.category,
+                  style: AppLightTextStyle.appCardItemContent2),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:work_report_app/data/models/user_financial_item.dart';
+import 'package:work_report_app/data/models/user_item.dart';
 import 'package:work_report_app/gen/fonts.gen.dart';
 import 'package:work_report_app/main.dart';
 import 'package:work_report_app/objectbox.g.dart';
 import 'package:work_report_app/ui/components/app_text_style.dart';
 import 'package:work_report_app/ui/constants/app_colors.dart';
 import 'package:work_report_app/ui/constants/app_strings.dart';
-import 'package:work_report_app/ui/widgets/app_card_item3.dart';
 import 'package:work_report_app/ui/widgets/app_main_app_bar.dart';
 import 'package:work_report_app/ui/widgets/app_report_card.dart';
 import 'package:work_report_app/ui/widgets/buttons/app_small_black_button.dart';
@@ -22,6 +21,7 @@ class ReportScreen extends StatefulWidget {
 
 class _ReportScreenState extends State<ReportScreen> {
   final financialItemBox = objectBox.store.box<UserFinancialItem>();
+  final itemBox = objectBox.store.box<UserItem>();
   late List<UserFinancialItem> financialItemList = [];
   TextEditingController titleController = TextEditingController();
   FocusNode titleNode = FocusNode();
@@ -32,9 +32,11 @@ class _ReportScreenState extends State<ReportScreen> {
   Jalali? lastInput;
   bool dateStartSelecte = false;
   bool dateEndSelecte = false;
+  UserFinancialItem largestItem = UserFinancialItem();
   @override
   void initState() {
     getFinancialItemData();
+    biggestAmount();
     super.initState();
     titleNode.addListener(() {
       setState(() {});
@@ -212,6 +214,18 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               const SizedBox(height: 30),
               const Text(
+                AppStrings.biggestAmount,
+                style: AppLightTextStyle.appMainTitleInRed,
+              ),
+              AppReportCard(
+                category: largestItem.item.target?.title ?? '',
+                title: largestItem.item.target?.category.target?.title ?? '',
+                description: largestItem.description ?? '',
+                amount: largestItem.amount ?? '',
+                date:
+                    '${largestItem.date!.toJalali().year.toString()} / ${largestItem.date!.toJalali().month.toString()} / ${largestItem.date!.toJalali().day.toString()}',
+              ),
+              const Text(
                 AppStrings.thisMonth,
                 style: AppLightTextStyle.appMainTitleInRed,
               ),
@@ -228,6 +242,13 @@ class _ReportScreenState extends State<ReportScreen> {
                     child: AppReportCard(
                       category:
                           financialItemList[index].item.target?.title ?? '',
+                      title: financialItemList[index]
+                              .item
+                              .target
+                              ?.category
+                              .target
+                              ?.title ??
+                          '',
                       description: financialItemList[index].description ?? '',
                       amount: financialItemList[index].amount ?? '',
                       date:
@@ -243,6 +264,24 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
+  void getData() {
+    QueryBuilder<UserFinancialItem> builder = financialItemBox.query();
+    builder.link(UserFinancialItem_.item, UserItem_.type.equals(widget.type));
+    Query<UserFinancialItem> query = builder.build();
+  }
+
+  void biggestAmount() {
+    QueryBuilder<UserFinancialItem> builder = financialItemBox.query();
+    builder.link(UserFinancialItem_.item, UserItem_.type.equals(widget.type));
+    builder.order(UserFinancialItem_.amount, flags: Order.descending);
+
+    Query<UserFinancialItem> query = builder.build();
+    UserFinancialItem? biggestItem = query.findFirst();
+    setState(() {
+      largestItem = biggestItem!;
+    });
+  }
+
   void getFinancialItemData() {
     Jalali today = Jalali.now();
     Jalali firstDay = Jalali(today.year, today.month, 1);
@@ -256,7 +295,6 @@ class _ReportScreenState extends State<ReportScreen> {
     QueryBuilder<UserFinancialItem> builder = financialItemBox.query(
         UserFinancialItem_.date
             .between(firstDayOfMonthInInt, lastDayOfMonthInInt));
-    //QueryBuilder<UserFinancialItem> builder = financialItemBox.query();
     builder.link(UserFinancialItem_.item, UserItem_.type.equals(widget.type));
     Query<UserFinancialItem> query = builder.build();
     for (var element in query.find()) {
